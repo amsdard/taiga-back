@@ -51,6 +51,7 @@ from taiga.projects.mixins.on_destroy import MoveOnDestroyMixin
 from taiga.projects.mixins.ordering import BulkUpdateOrderMixin
 from taiga.projects.tasks.models import Task
 from taiga.projects.tagging.api import TagsColorsResourceMixin
+from taiga.projects.models import Project, UserStoryStatus
 from taiga.projects.userstories.models import UserStory, RolePoints
 from taiga.users import services as users_services
 
@@ -63,6 +64,7 @@ from . import services
 from . import utils as project_utils
 from . import throttling
 
+import datetime
 ######################################################
 # Project
 ######################################################
@@ -161,6 +163,24 @@ class ProjectViewSet(LikedResourceMixin, HistoryResourceMixin,
             return serializers.ProjectSerializer
 
         return serializers.ProjectDetailSerializer
+
+    @detail_route(methods=["GET", "POST"])
+    def deploy_project(self, request, *args, **kwargs):
+        current_project = Project.objects.filter(id=kwargs['pk'])[0]
+        bound_statuses = UserStoryStatus.objects.filter(project=current_project)
+        done_id, archived_status = 0,0
+        for status in bound_statuses:
+            if status.name == 'Done':
+                done_id = status.id
+            elif status.name == 'Archived':
+                archived_status = status
+        done_us = UserStory.objects.filter(status = done_id)
+
+        for us in done_us:
+            us.status = archived_status
+            us.tags.append("Deployed on: " + datetime.datetime.today().strftime('%Y-%m-%d'))
+            us.save()
+        return response.Ok()
 
     @detail_route(methods=["POST"])
     def change_logo(self, request, *args, **kwargs):
@@ -274,11 +294,6 @@ class ProjectViewSet(LikedResourceMixin, HistoryResourceMixin,
         project.save()
         return uuid_value
 
-    def _delete_csv_uuid(self, project, field):
-        setattr(project, field, None)
-        project.save()
-        return getattr(project, field)
-
     @detail_route(methods=["POST"])
     def regenerate_epics_csv_uuid(self, request, pk=None):
         project = self.get_object()
@@ -309,38 +324,6 @@ class ProjectViewSet(LikedResourceMixin, HistoryResourceMixin,
         self.check_permissions(request, "regenerate_issues_csv_uuid", project)
         self.pre_conditions_on_save(project)
         data = {"uuid": self._regenerate_csv_uuid(project, "issues_csv_uuid")}
-        return response.Ok(data)
-
-    @detail_route(methods=["POST"])
-    def delete_epics_csv_uuid(self, request, pk=None):
-        project = self.get_object()
-        self.check_permissions(request, "delete_epics_csv_uuid", project)
-        self.pre_conditions_on_save(project)
-        data = {"uuid": self._delete_csv_uuid(project, "epics_csv_uuid")}
-        return response.Ok(data)
-
-    @detail_route(methods=["POST"])
-    def delete_userstories_csv_uuid(self, request, pk=None):
-        project = self.get_object()
-        self.check_permissions(request, "delete_userstories_csv_uuid", project)
-        self.pre_conditions_on_save(project)
-        data = {"uuid": self._delete_csv_uuid(project, "userstories_csv_uuid")}
-        return response.Ok(data)
-
-    @detail_route(methods=["POST"])
-    def delete_tasks_csv_uuid(self, request, pk=None):
-        project = self.get_object()
-        self.check_permissions(request, "delete_tasks_csv_uuid", project)
-        self.pre_conditions_on_save(project)
-        data = {"uuid": self._delete_csv_uuid(project, "tasks_csv_uuid")}
-        return response.Ok(data)
-
-    @detail_route(methods=["POST"])
-    def delete_issues_csv_uuid(self, request, pk=None):
-        project = self.get_object()
-        self.check_permissions(request, "delete_issues_csv_uuid", project)
-        self.pre_conditions_on_save(project)
-        data = {"uuid": self._delete_csv_uuid(project, "issues_csv_uuid")}
         return response.Ok(data)
 
     @list_route(methods=["GET"])
@@ -550,6 +533,8 @@ class ProjectFansViewSet(FansViewSetMixin, ModelListViewSet):
 class ProjectWatchersViewSet(WatchersViewSetMixin, ModelListViewSet):
     permission_classes = (permissions.ProjectWatchersPermission,)
     resource_model = models.Project
+
+
 
 
 ######################################################

@@ -22,9 +22,11 @@ from django.utils.translation import ugettext_lazy as _
 from taiga.base.fields import JSONField
 from taiga.base.exceptions import ValidationError
 from taiga.base.api.validators import ModelValidator
+from taiga.projects.custom_attributes.models import UserStoryCustomAttribute
 
 from . import models
 
+import re
 
 ######################################################
 # Custom Attribute Validator
@@ -99,7 +101,28 @@ class BaseCustomAttributesValuesValidator(ModelValidator):
     class Meta:
         exclude = ("id",)
 
+    @staticmethod
+    def validate_estimation(value):
+        regular_expression = '([0-9]+w)*([0-9]+d)*([0-9]+h)*'
+        timestamps = [int('0'+item[:-1]) for item in re.findall(regular_expression, value)[0]]
+        while timestamps[2] >= 8:
+            timestamps[2] -= 8
+            timestamps[1] += 1
+        while timestamps[1] >= 5:
+            timestamps[1] -= 5
+            timestamps[0] += 1
+        timestamps[0] = str(timestamps[0]) + 'w' if timestamps[0] > 0 else ''
+        timestamps[1] = str(timestamps[1]) + 'd' if timestamps[1] > 0 else ''
+        timestamps[2] = str(timestamps[2]) + 'h' if timestamps[2] > 0 else ''
+        return ''.join(timestamps)
+
     def validate_attributes_values(self, attrs, source):
+        estimate_field_ids = [field.id for field in UserStoryCustomAttribute.objects.all() if field.type == "est"]
+        attributes_dict = attrs['attributes_values']
+        for key in attributes_dict:
+            if int(key) in estimate_field_ids:
+                attributes_dict[key] = self.validate_estimation(attributes_dict[key])
+        attrs['attributes_values'] = attributes_dict
         # values must be a dict
         data_values = attrs.get("attributes_values", None)
         if self.object:

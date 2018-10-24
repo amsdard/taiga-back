@@ -114,7 +114,8 @@ class UserStory(OCCModelMixin, WatchedModelMixin, BlockedMixin, TaggedMixin, Due
 
     tribe_gig = PickledObjectField(null=True, blank=True, default=None,
                                    verbose_name="taiga tribe gig")
-
+    is_important = models.BooleanField(default=False, null=False, blank=True,
+                                           verbose_name=_("is this important"))
     _importing = None
 
     class Meta:

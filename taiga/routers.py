@@ -19,6 +19,8 @@
 from taiga.base import routers
 from django.conf import settings
 
+from rest_framework.decorators import action
+
 router = routers.DefaultRouter(trailing_slash=False)
 
 # Locales
@@ -71,6 +73,7 @@ from taiga.projects.api import ProjectTemplateViewSet
 router.register(r"projects", ProjectViewSet, base_name="projects")
 router.register(r"projects/(?P<resource_id>\d+)/fans", ProjectFansViewSet, base_name="project-fans")
 router.register(r"projects/(?P<resource_id>\d+)/watchers", ProjectWatchersViewSet, base_name="project-watchers")
+# router.register(r"projects/(?P<resource_id>\d+)/deploy_project", base_name="project-deploy")
 router.register(r"project-templates", ProjectTemplateViewSet, base_name="project-templates")
 router.register(r"memberships", MembershipViewSet, base_name="memberships")
 router.register(r"invitations", InvitationViewSet, base_name="invitations")

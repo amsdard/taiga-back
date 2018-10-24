@@ -28,7 +28,7 @@ from taiga.base.utils.iterators import as_tuple
 from taiga.base.utils.iterators import as_dict
 from taiga.mdrender.service import render as mdrender
 
-from taiga.projects.attachments.services import get_timeline_image_thumbnail_name
+from taiga.projects.attachments.services import get_timeline_image_thumbnail_url
 
 import os
 
@@ -198,14 +198,12 @@ def _generic_extract(obj:object, fields:list, default=None) -> dict:
 @as_tuple
 def extract_attachments(obj) -> list:
     for attach in obj.attachments.all():
-        # Force the creation of a thumbnail for the timeline
-        thumbnail_file = get_timeline_image_thumbnail_name(attach)
+        thumb_url = get_timeline_image_thumbnail_url(attach)
 
         yield {"id": attach.id,
                "filename": os.path.basename(attach.attached_file.name),
                "url": attach.attached_file.url,
-               "attached_file": str(attach.attached_file),
-               "thumbnail_file": thumbnail_file,
+               "thumb_url": thumb_url,
                "is_deprecated": attach.is_deprecated,
                "description": attach.description,
                "order": attach.order}
@@ -366,6 +364,7 @@ def userstory_freezer(us) -> dict:
         "points": points,
         "from_issue": us.generated_from_issue_id,
         "is_blocked": us.is_blocked,
+        "is_important": us.is_important,
         "blocked_note": us.blocked_note,
         "blocked_note_html": mdrender(us.project, us.blocked_note),
         "custom_attributes": extract_user_story_custom_attributes(us),

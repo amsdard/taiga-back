@@ -74,7 +74,6 @@ class TaskViewSet(OCCResourceMixin, VotedResourceMixin, HistoryResourceMixin, Wa
                        "created_date",
                        "modified_date",
                        "assigned_to",
-                       "us_order",
                        "subject",
                        "total_voters")
 

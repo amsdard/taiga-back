@@ -2,27 +2,6 @@
 
 ## Unreleased
 
-## 3.4.5 (2018-10-15)
-
-### Features
-
-- Prevent local Webhooks 
-
-## 3.4.4 (2018-09-19)
-
-### Misc
-
-- Small fixes
-
-## 3.4.3 (2018-09-19)
-
-### Misc
-
-- Refactor attachment url's in timeline
-- Avoid receive feedkback in private projects from non-members
-- Allow delete reports uuid's
-- Small fixes
-
 ## 3.4.0 Pinus contorta (2018-08-13)
 
 ### Features

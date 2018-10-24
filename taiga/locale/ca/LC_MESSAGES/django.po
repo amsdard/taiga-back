@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: taiga-back\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-11 14:11+0200\n"
-"PO-Revision-Date: 2018-10-14 17:29+0000\n"
+"POT-Creation-Date: 2018-08-10 11:35+0200\n"
+"PO-Revision-Date: 2018-08-10 09:46+0000\n"
 "Last-Translator: Alejandro Hermida <alexhermida@gmail.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/taiga-agile-llc/taiga-back/"
 "language/ca/)\n"
@@ -62,8 +62,8 @@ msgid "Error on creating new user."
 msgstr "Error creant un nou usuari."
 
 #: taiga/auth/tokens.py:49 taiga/auth/tokens.py:56
-#: taiga/external_apps/services.py:34 taiga/projects/api.py:426
-#: taiga/projects/api.py:447
+#: taiga/external_apps/services.py:34 taiga/projects/api.py:389
+#: taiga/projects/api.py:410
 msgid "Invalid token"
 msgstr "Token invàlid"
 
@@ -193,11 +193,11 @@ msgstr ""
 "està corrupte."
 
 #: taiga/base/api/mixins.py:284 taiga/base/exceptions.py:211
-#: taiga/hooks/api.py:69 taiga/projects/api.py:461 taiga/projects/api.py:494
-#: taiga/projects/api.py:970 taiga/projects/epics/api.py:200
+#: taiga/hooks/api.py:69 taiga/projects/api.py:424 taiga/projects/api.py:457
+#: taiga/projects/api.py:933 taiga/projects/epics/api.py:200
 #: taiga/projects/epics/api.py:284 taiga/projects/issues/api.py:233
-#: taiga/projects/mixins/ordering.py:59 taiga/projects/tasks/api.py:259
-#: taiga/projects/tasks/api.py:284 taiga/projects/userstories/api.py:346
+#: taiga/projects/mixins/ordering.py:59 taiga/projects/tasks/api.py:258
+#: taiga/projects/tasks/api.py:283 taiga/projects/userstories/api.py:346
 #: taiga/projects/userstories/api.py:398 taiga/webhooks/api.py:71
 msgid "Blocked element"
 msgstr ""
@@ -479,14 +479,6 @@ msgstr ""
 "\n"
 "    Comentari: %(comment)s\n"
 "        "
-
-#: taiga/base/utils/urls.py:68
-msgid "Host access error"
-msgstr ""
-
-#: taiga/base/utils/urls.py:74
-msgid "IP Address error"
-msgstr ""
 
 #: taiga/events/events.py:106
 msgid "User story created"
@@ -991,7 +983,7 @@ msgid "The payload is not a valid json"
 msgstr "El payload no és un arxiu json vàlid"
 
 #: taiga/hooks/api.py:63 taiga/projects/epics/api.py:154
-#: taiga/projects/issues/api.py:142 taiga/projects/tasks/api.py:211
+#: taiga/projects/issues/api.py:142 taiga/projects/tasks/api.py:210
 #: taiga/projects/userstories/api.py:290
 msgid "The project doesn't exist"
 msgstr "El projecte no existeix"
@@ -1531,55 +1523,55 @@ msgstr ""
 msgid "Not valid template description"
 msgstr ""
 
-#: taiga/projects/api.py:406 taiga/projects/api.py:1005
+#: taiga/projects/api.py:369 taiga/projects/api.py:968
 msgid "Invalid user id"
 msgstr ""
 
-#: taiga/projects/api.py:412 taiga/projects/api.py:1011
+#: taiga/projects/api.py:375 taiga/projects/api.py:974
 msgid "The user doesn't exist"
 msgstr ""
 
-#: taiga/projects/api.py:416
+#: taiga/projects/api.py:379
 msgid "The user must be already a project member"
 msgstr ""
 
-#: taiga/projects/api.py:642
+#: taiga/projects/api.py:605
 msgid "You can't delete user story due date by default"
 msgstr ""
 
-#: taiga/projects/api.py:658
+#: taiga/projects/api.py:621
 msgid "Project already have due dates"
 msgstr ""
 
-#: taiga/projects/api.py:718
+#: taiga/projects/api.py:681
 msgid "You can't delete task due date by default"
 msgstr ""
 
-#: taiga/projects/api.py:734
+#: taiga/projects/api.py:697
 msgid "Project already have task due dates"
 msgstr ""
 
-#: taiga/projects/api.py:858
+#: taiga/projects/api.py:821
 msgid "You can't delete issue due date by default"
 msgstr ""
 
-#: taiga/projects/api.py:874
+#: taiga/projects/api.py:837
 msgid "Project already have issue due dates"
 msgstr ""
 
-#: taiga/projects/api.py:1023
+#: taiga/projects/api.py:986
 msgid ""
 "This user can't be removed from the following projects, because would leave "
 "them without any active admin: {}."
 msgstr ""
 
-#: taiga/projects/api.py:1033
+#: taiga/projects/api.py:996
 msgid ""
 "The project must have an owner and at least one of the users must be an "
 "active admin"
 msgstr ""
 
-#: taiga/projects/api.py:1067
+#: taiga/projects/api.py:1030
 msgid "You don't have permisions to see that."
 msgstr "No tens permisos per a veure açò."
 
@@ -3036,23 +3028,23 @@ msgid "You have reached the current limit of pending memberships"
 msgstr ""
 
 #: taiga/projects/services/projects.py:101
-#: taiga/projects/services/projects.py:141 taiga/users/services.py:600
+#: taiga/projects/services/projects.py:141 taiga/users/services.py:596
 msgid "You can't have more private projects"
 msgstr ""
 
 #: taiga/projects/services/projects.py:105
-#: taiga/projects/services/projects.py:145 taiga/users/services.py:603
+#: taiga/projects/services/projects.py:145 taiga/users/services.py:599
 msgid ""
 "This project reaches your current limit of memberships for private projects"
 msgstr ""
 
 #: taiga/projects/services/projects.py:109
-#: taiga/projects/services/projects.py:149 taiga/users/services.py:607
+#: taiga/projects/services/projects.py:149 taiga/users/services.py:603
 msgid "You can't have more public projects"
 msgstr ""
 
 #: taiga/projects/services/projects.py:113
-#: taiga/projects/services/projects.py:153 taiga/users/services.py:610
+#: taiga/projects/services/projects.py:153 taiga/users/services.py:606
 msgid ""
 "This project reaches your current limit of memberships for public projects"
 msgstr ""
@@ -3118,15 +3110,15 @@ msgstr ""
 msgid "The tag doesn't exist."
 msgstr ""
 
-#: taiga/projects/tasks/api.py:108 taiga/projects/tasks/api.py:117
+#: taiga/projects/tasks/api.py:107 taiga/projects/tasks/api.py:116
 msgid "You don't have permissions to set this sprint to this task."
 msgstr ""
 
-#: taiga/projects/tasks/api.py:111
+#: taiga/projects/tasks/api.py:110
 msgid "You don't have permissions to set this user story to this task."
 msgstr ""
 
-#: taiga/projects/tasks/api.py:114
+#: taiga/projects/tasks/api.py:113
 msgid "You don't have permissions to set this status to this task."
 msgstr ""
 
@@ -4283,8 +4275,4 @@ msgstr ""
 
 #: taiga/webhooks/models.py:46
 msgid "duration"
-msgstr ""
-
-#: taiga/webhooks/validators.py:42
-msgid "Not allowed IP Address"
 msgstr ""

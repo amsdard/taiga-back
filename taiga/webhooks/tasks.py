@@ -21,10 +21,8 @@ import hashlib
 import requests
 from requests.exceptions import RequestException
 
-from django.conf import settings
-
 from taiga.base.api.renderers import UnicodeJSONRenderer
-from taiga.base.utils import json, urls
+from taiga.base.utils import json
 from taiga.base.utils.db import get_typename_for_model_instance
 from taiga.celery import app
 
@@ -32,7 +30,6 @@ from .serializers import (EpicSerializer, EpicRelatedUserStorySerializer,
                           UserStorySerializer, IssueSerializer, TaskSerializer,
                           WikiPageSerializer, MilestoneSerializer,
                           HistoryEntrySerializer, UserSerializer)
-
 from .models import WebhookLog
 
 
@@ -66,15 +63,6 @@ def _generate_signature(data, key):
     return mac.hexdigest()
 
 
-def _remove_leftover_webhooklogs(webhook_id):
-    # Only the last ten webhook logs traces are required
-    # so remove the leftover
-    ids = (WebhookLog.objects.filter(webhook_id=webhook_id)
-               .order_by("-id")
-               .values_list('id', flat=True)[10:])
-    WebhookLog.objects.filter(id__in=ids).delete()
-
-
 def _send_request(webhook_id, url, key, data):
     serialized_data = UnicodeJSONRenderer().render(data)
     signature = _generate_signature(serialized_data, key)
@@ -83,24 +71,6 @@ def _send_request(webhook_id, url, key, data):
         "X-Hub-Signature": "sha1={}".format(signature),
         "Content-Type": "application/json"
     }
-
-    if settings.WEBHOOKS_BLOCK_PRIVATE_ADDRESS:
-        try:
-            urls.validate_private_url(url)
-        except (urls.IpAddresValueError, urls.HostnameException) as e:
-            # Error validating url
-            webhook_log = WebhookLog.objects.create(webhook_id=webhook_id, url=url,
-                                                    status=0,
-                                                    request_data=data,
-                                                    request_headers=dict(),
-                                                    response_data="error-in-request: {}".format(
-                                                        str(e)),
-                                                    response_headers={},
-                                                    duration=0)
-            _remove_leftover_webhooklogs(webhook_id)
-
-            return webhook_log
-
     request = requests.Request('POST', url, data=serialized_data, headers=headers)
     prepared_request = request.prepare()
 
@@ -128,7 +98,12 @@ def _send_request(webhook_id, url, key, data):
                                                     response_headers=dict(response.headers),
                                                     duration=response.elapsed.total_seconds())
         finally:
-            _remove_leftover_webhooklogs(webhook_id)
+            # Only the last ten webhook logs traces are required
+            # so remove the leftover
+            ids = (WebhookLog.objects.filter(webhook_id=webhook_id)
+                                     .order_by("-id")
+                                     .values_list('id', flat=True)[10:])
+            WebhookLog.objects.filter(id__in=ids).delete()
 
     return webhook_log
 
