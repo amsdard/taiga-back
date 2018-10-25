@@ -162,6 +162,24 @@ class ProjectViewSet(LikedResourceMixin, HistoryResourceMixin,
 
         return serializers.ProjectDetailSerializer
 
+    @detail_route(methods=["GET", "POST"])
+    def deploy_project(self, request, *args, **kwargs):
+        current_project = Project.objects.filter(id=kwargs['pk'])[0]
+        bound_statuses = UserStoryStatus.objects.filter(project=current_project)
+        done_id, archived_status = 0, 0
+        for status in bound_statuses:
+            if status.name == 'Done':
+                done_id = status.id
+            elif status.name == 'Archived':
+                archived_status = status
+        done_us = UserStory.objects.filter(status=done_id)
+
+        for us in done_us:
+            us.status = archived_status
+            us.tags.append("Deployed on: " + datetime.datetime.today().strftime('%Y-%m-%d'))
+            us.save()
+        return response.Ok()
+
     @detail_route(methods=["POST"])
     def change_logo(self, request, *args, **kwargs):
         """

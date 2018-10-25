@@ -24,11 +24,13 @@ MULTILINE_TYPE = "multiline"
 RICHTEXT_TYPE = "richtext"
 DATE_TYPE = "date"
 URL_TYPE = "url"
+ESTIMATE_TYPE = "est"
 
 TYPES_CHOICES = (
     (TEXT_TYPE, _("Text")),
     (MULTILINE_TYPE, _("Multi-Line Text")),
     (RICHTEXT_TYPE, _("Rich text")),
     (DATE_TYPE, _("Date")),
-    (URL_TYPE, _("Url"))
+    (URL_TYPE, _("Url")),
+    (ESTIMATE_TYPE, _("Est"))
 )

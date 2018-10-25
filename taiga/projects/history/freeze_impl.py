@@ -366,6 +366,7 @@ def userstory_freezer(us) -> dict:
         "points": points,
         "from_issue": us.generated_from_issue_id,
         "is_blocked": us.is_blocked,
+        "is_important": us.is_important,
         "blocked_note": us.blocked_note,
         "blocked_note_html": mdrender(us.project, us.blocked_note),
         "custom_attributes": extract_user_story_custom_attributes(us),
