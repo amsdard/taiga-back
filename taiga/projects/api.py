@@ -53,7 +53,7 @@ from taiga.projects.tasks.models import Task
 from taiga.projects.tagging.api import TagsColorsResourceMixin
 from taiga.projects.userstories.models import UserStory, RolePoints
 from taiga.users import services as users_services
-
+from taiga.projects.models import Project, UserStoryStatus
 from . import filters as project_filters
 from . import models
 from . import permissions
@@ -63,6 +63,7 @@ from . import services
 from . import utils as project_utils
 from . import throttling
 
+import datetime
 ######################################################
 # Project
 ######################################################

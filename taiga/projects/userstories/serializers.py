@@ -59,6 +59,7 @@ class UserStoryListSerializer(ProjectExtraInfoSerializerMixin,
     milestone_name = MethodField()
     project = Field(attr="project_id")
     is_closed = Field()
+    description = Field()
     is_important = Field()
     points = MethodField()
     backlog_order = Field()
